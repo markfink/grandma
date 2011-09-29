@@ -1,13 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
-from distutils.core import setup, Extension
-
-setup(name = "Jenny",
-      version = "1.0",
-      ext_modules = [Extension("jenny", ["jenny.c"])])
-
 try:
     from setuptools import setup, find_packages, Extension
     have_setuptools = True
@@ -32,7 +25,7 @@ setup(
     packages = find_packages(),
     license='GNU LESSER GENERAL PUBLIC LICENSE, Version 3',
     long_description=open('README').read(),
-    ext_modules = [Extension("jenny", ["jenny.c"])])
+    ext_modules = [Extension("grandma", ["./jenny/jenny.c"])],
     scripts=['bin/grandma',],
     test_suite='nose.collector',
     test_requires=['nose', 'coverage'],

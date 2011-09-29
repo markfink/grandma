@@ -1874,8 +1874,8 @@ PyMethodDef methods[] = {
     {NULL}
 };
 
-PyMODINIT_FUNC initjenny() {
-    (void) Py_InitModule("jenny", methods);   
+PyMODINIT_FUNC initgrandma() {
+    (void) Py_InitModule("grandma", methods);   
 }
 
 
