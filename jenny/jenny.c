@@ -1,6 +1,12 @@
+/* Mark Fink added Python integration in 2011 */
+
 /*
 -------------------------------------------------------------------------------
 By Bob Jenkins, March 2003.  Public domain.
+
+See http://burtleburtle.net/bob/math/jenny.html for
+a description of jenny.
+
 
 jenny.c -- jennyrate tests from m dimensions of features that cover all
   n-tuples of features, n <= m, with each feature chosen from a different 
@@ -1874,8 +1880,8 @@ PyMethodDef methods[] = {
     {NULL}
 };
 
-PyMODINIT_FUNC initgrandma() {
-    (void) Py_InitModule("grandma", methods);   
+PyMODINIT_FUNC initjenny() {
+    (void) Py_InitModule("jenny", methods);   
 }
 
 

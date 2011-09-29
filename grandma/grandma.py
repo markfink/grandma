@@ -28,8 +28,10 @@ applications are similar, reaching
 
 from random import randint
 import itertools
-import collections
-from jenny import jenny_wrapper
+#import collections
+from collections import OrderedDict
+#from grandma 
+import jenny_wrapper
 
 def run_constraints(results, constraints):
     """
@@ -124,7 +126,7 @@ def main():
     #    'xxxLarge': xrange(73, 255),
     #    'ridiculouslyLarge': xrange(256, 1638)}
 
-    dims = {
+    """dims = {
         'font': ['arial', 'tahoma', 'brushScript', 'monotypeCorsive'],
         'bold':   [True, False],
         'italic': [True, False],
@@ -132,26 +134,38 @@ def main():
         'underline': [True, False],
         'color': ['black', 'yellow', 'white', 'blue', 'red', 'green'],
         'size': ['small', 'nominal', 'large', 'xLarge', 'xxLarge', 'xxxLarge', 'ridiculouslyLarge']
-    }
+    }"""
+    dims = OrderedDict({
+        'font': ['arial', 'tahoma', 'brushScript', 'monotypeCorsive'],
+        'bold':   [True, False],
+        'italic': [True, False],
+        'strikethrough': [True, False],
+        'underline': [True, False],
+        'color': ['black', 'yellow', 'white', 'blue', 'red', 'green'],
+        'size': ['small', 'nominal', 'large', 'xLarge', 'xxLarge', 'xxxLarge', 'ridiculouslyLarge']
+    })
     
         #[h['small'], h['nominal'], h['large'], h['xLarge'],
         #    h['xxLarge'], h['xxxLarge'], h['ridiculouslyLarge']]}
 
-    incompats = []      
+    #incompats = []      
     # separate positive from negative tests
     #constraints = [
     #    "False if font == 'brushScript' and italic == False and bold == True else True",
     #    "False if font == 'monotypeCorsive' and bold != italic else True",
     #    "False if bold == True else True"]
-    incompats = [{'font': ['brushScript', 'monotypeCorsive'], 'italic': False, 'bold': True},
-                {'font': 'monotypeCorsive', 'italic': True, 'bold': False}]
+    #incompats = [{'font': ['brushScript', 'monotypeCorsive'], 'italic': False, 'bold': True},
+    #            {'font': 'monotypeCorsive', 'italic': True, 'bold': False}]
+    incompats = [
+        OrderedDict({'font': ['brushScript', 'monotypeCorsive'], 'italic': False, 'bold': True}),
+        OrderedDict({'font': 'monotypeCorsive', 'italic': True, 'bold': False})]
         
     reqs = []
     
     testcases = t_ways(dims, 5, incompats=incompats, reqs=reqs)
-    print testcases
-    #for t in testcases:
-    #    print t
+    #print testcases
+    for t in testcases:
+        print t
 
 
 if __name__ == '__main__':

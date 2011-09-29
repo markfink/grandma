@@ -1,31 +1,26 @@
 #!/usr/bin/env python
 
 """
-This is a wrapper for the C function "jenny.c"
+This is a wrapper for the jenny C extension.
 
-See http://burtleburtle.net/bob/math/jenny.html for
-a description of jenny.
-
-This script is based on a wrapper which I found here:
-http://www.kimbly.com/blog/000340.html
-
-I introduced the use of Python Dictionaries to ease automated test case 
-creation.
+I introduced Dictionaries to ease automated test case creation.
 """
 
-import re, sys
-from subprocess import Popen, PIPE
+#import re, sys
+#from subprocess import Popen, PIPE
 import itertools
 import collections
+#from grandma 
+from jenny import jenny
 
-
+'''
 def find_dim_of_feat(readable_feature, dims):
     for dim in dims:
         for feat in dim:
             if feat == readable_feature:
                 return dim
     raise "Unable to find feature '%s'" % readable_feature
-
+'''
     
 def readable_feat_to_jenny_feat(dim, readable_feature, dims):
     """converts "feature name" to "1a" format """
@@ -35,7 +30,7 @@ def readable_feat_to_jenny_feat(dim, readable_feature, dims):
     return "%d%s" % (dim_index+1, chr(feat_index + ord('a')))
     raise "Unable to find feature '%s'" % readable_feature
 
-
+'''
 def jenny_feat_to_readable_feat(jenny_feature, dims):
     """converts "1a" format to "feature name" """
     keys = dims.keys()
@@ -67,7 +62,12 @@ def jenny_result_to_test(line, dims):
     except:
         sys.stderr.write("Error parsing jenny output line: '%s'\n" % line)
         raise
-
+'''
+def jenny_to_tests(tests, dims):
+    """ converts "(0, 0, 0, 0, 2, 0, 5)" to real tests"""
+    for t in tests:
+        yield {d: dims[d][t[i]] for i,d in enumerate(dims.keys())}
+    
 
 def create_test_cases(dims, arity, incompats=[], reqs=[]):
     """
@@ -87,10 +87,12 @@ def create_test_cases(dims, arity, incompats=[], reqs=[]):
     """
     tests = [] # the generated testcases
     keys = dims.keys()
-    cmd = "./jenny/jenny -n%d" % arity
+    #cmd = "./jenny/jenny -n%d" % arity
+    cmd = ['-n%d' % arity]
     # add dimensions to command line
-    for k in keys:
-        cmd += " %d" % len(dims[k])
+    #for k in keys:
+    #    cmd += " %d" % len(dims[k])
+    cmd += ['%d' % len(dims[k]) for k in keys]
 
     #for depender_feat, dependee_feat in reqs:
     #    for incompat_feat in find_dim_of_feat(dependee_feat, dims):
@@ -106,16 +108,23 @@ def create_test_cases(dims, arity, incompats=[], reqs=[]):
                 not isinstance(x, collections.Iterable)) else x for x in inc.values()]
             inc_prod = itertools.product(*values)
             for n in inc_prod:
-                cmd += ' -w' + ''.join(
-                    [readable_feat_to_jenny_feat(x, n[i], dims) for i,x in enumerate(inc_keys)])
+                #cmd += ' -w' + ''.join(
+                cmd.append('-w' + ''.join(
+                    [readable_feat_to_jenny_feat(x, n[i], dims) for i,x in enumerate(inc_keys)]))
 
-    p = Popen(cmd, shell=True, stdout=PIPE)
-    jenny_tests = p.stdout.readlines()
-    for test in jenny_tests:
-        readable_test =  jenny_result_to_test(test, dims)
-        tests.append(readable_test)
+    #print 'cmd: ' + str(cmd)
+    #p = Popen(cmd, shell=True, stdout=PIPE)
+    #jenny_tests = p.stdout.readlines()
+    #for test in jenny_tests:
+    #    readable_test =  jenny_result_to_test(test, dims)
+    #    tests.append(readable_test)
         #if readable_test <> None:
             #print readable_test
+    jenny_tests = jenny(*cmd)
+    #print jenny_tests
+    
+    # return generator
+    tests = jenny_to_tests(jenny_tests, dims)
 
     #sys.stderr.write("Total test cases required: %d\n" % len(tests))
     return tests
