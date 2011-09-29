@@ -39,7 +39,7 @@ def readable_feat_to_jenny_feat(dim, readable_feature, dims):
 def jenny_feat_to_readable_feat(jenny_feature, dims):
     """converts "1a" format to "feature name" """
     keys = dims.keys()
-    pattern = re.compile('([0-9]+)([a-z]+)')
+    pattern = re.compile('([0-9]+)([a-zA-Z]+)')
     dim_index, feature_index = pattern.match(jenny_feature).group(1, 2)
     dim = keys[int(dim_index) - 1]
     feature_name = dims[dim][ord(feature_index) - ord('a')]

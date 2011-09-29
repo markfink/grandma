@@ -51,9 +51,10 @@ number of testcases required to at least 5*3*3=45.
 -------------------------------------------------------------------------------
 */
 
-#include <stdio.h>
+#include <Python.h>
+//#include <stdio.h>
+//#include <stdlib.h>
 #include <stddef.h>
-#include <stdlib.h>
 #include <string.h>
 
 /*
@@ -1803,4 +1804,78 @@ int main( int argc, char *argv[])
   driver(argc, argv);
   return 0;
 }
+
+
+////////////////////////////////////////////////////////////
+// Here starts the wrapper code to build a C-Extension
+////////////////////////////////////////////////////////////
+
+void export( test *t, ub2 len, PyObject *l) {
+    /* print out a single test */
+    ub4 i;
+    PyObject *tuple;
+    
+    tuple = PyTuple_New(len);
+
+    for (i=0; i<len; ++i) {
+        PyTuple_SetItem(tuple, i, PyInt_FromLong(t->f[i]) );
+        //printf(" %d%c", i+1, feature_name[t->f[i]]);
+    }
+    PyList_Append(l, tuple); // append the tupel to the result list
+}
+
+
+void export_all(state *s, PyObject *l) {
+  /* print out all the tests */
+  ub4   i;
+  for (i=0; i<s->ntests; ++i) {
+    export(s->t[i], s->ndim, l);
+  }
+}
+
+
+PyObject* jenny(PyObject* self, PyObject* args) {
+    char **argv;
+    int    argc, res, i;
+    state s;                     /* internal state */
+    initialize(&s);
+    PyObject *l;
+    l = PyList_New(0);
+        
+    // parse the arguments
+    argc = PyTuple_Size(args);
+    argv = (char**)malloc(sizeof(char*) * argc); 
+    if (argv==NULL)
+        return PyErr_NoMemory();    
+    for(i = 0; i < argc; i++)
+        argv[i] = PyString_AsString(PyTuple_GetItem(args, i));
+
+    if (parse(argc, argv, &s)) { /* read the user's instructions */
+        cover_tuples(&s);        /* generate testcases until all tuples are covered */
+        /* reduce_tests(&s); */  /* try to reduce the number of testcases */
+        if (confirm(&s))         /* doublecheck that all tuples really are covered */
+            export_all(&s, l);   /* export the results */
+        else
+            printf("jenny: internal error, some tuples not covered\n");
+    }
+    
+    cleanup(&s);                 /* deallocate everything */
+    
+    // free memory used for params
+    free(argv);
+    
+    //return Py_BuildValue("i", 0);
+    return l;
+}
+
+
+PyMethodDef methods[] = {
+    {"jenny", jenny, METH_VARARGS, "Returns a jenny result"},
+    {NULL}
+};
+
+PyMODINIT_FUNC initjenny() {
+    (void) Py_InitModule("jenny", methods);   
+}
+
 
