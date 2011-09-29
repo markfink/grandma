@@ -1,0 +1,15 @@
+# Folders
+research/
+built/
+zoku/
+.coverage
+*.egg-info*
+
+
+# Single Files
+*.pyc
+*.swp
+*.swo
+*.bak
+*.log
+
