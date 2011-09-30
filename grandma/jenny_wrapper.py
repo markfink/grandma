@@ -88,7 +88,7 @@ def create_test_cases(dims, arity, incompats=[], reqs=[]):
     tests = [] # the generated testcases
     keys = dims.keys()
     #cmd = "./jenny/jenny -n%d" % arity
-    cmd = ['-n%d' % arity]
+    cmd = ['from_grandma', '-n%d' % arity]
     # add dimensions to command line
     #for k in keys:
     #    cmd += " %d" % len(dims[k])
@@ -112,7 +112,7 @@ def create_test_cases(dims, arity, incompats=[], reqs=[]):
                 cmd.append('-w' + ''.join(
                     [readable_feat_to_jenny_feat(x, n[i], dims) for i,x in enumerate(inc_keys)]))
 
-    #print 'cmd: ' + str(cmd)
+    print 'cmd: ' + str(cmd)
     #p = Popen(cmd, shell=True, stdout=PIPE)
     #jenny_tests = p.stdout.readlines()
     #for test in jenny_tests:

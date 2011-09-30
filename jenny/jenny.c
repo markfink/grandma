@@ -1840,6 +1840,39 @@ void export_all(state *s, PyObject *l) {
 }
 
 
+PyObject* old(PyObject* self, PyObject* args) {
+    // For debugging purposes made the original entry available
+    char **argv;
+    int    argc, res, i;
+    state s;                     /* internal state */
+    initialize(&s);
+        
+    // parse the arguments
+    argc = PyTuple_Size(args);
+    argv = (char**)malloc(sizeof(char*) * argc); 
+    if (argv==NULL)
+        return PyErr_NoMemory();    
+    for(i = 0; i < argc; i++)
+        argv[i] = PyString_AsString(PyTuple_GetItem(args, i));
+
+    if (parse(argc, argv, &s)) { /* read the user's instructions */
+        cover_tuples(&s);        /* generate testcases until all tuples are covered */
+        /* reduce_tests(&s); */  /* try to reduce the number of testcases */
+        if (confirm(&s))         /* doublecheck that all tuples really are covered */
+            report_all(&s);   /* export the results */
+        else
+            printf("jenny: internal error, some tuples not covered\n");
+    }
+    
+    cleanup(&s);                 /* deallocate everything */
+    
+    // free memory used for params
+    free(argv);
+    
+    return Py_BuildValue("i", 0);
+}
+
+
 PyObject* jenny(PyObject* self, PyObject* args) {
     char **argv;
     int    argc, res, i;
@@ -1876,7 +1909,8 @@ PyObject* jenny(PyObject* self, PyObject* args) {
 
 
 PyMethodDef methods[] = {
-    {"jenny", jenny, METH_VARARGS, "Returns a jenny result"},
+    {"jenny", jenny, METH_VARARGS, "Return jenny results."},
+    {"old", old, METH_VARARGS, "Print jenny results."},
     {NULL}
 };
 
