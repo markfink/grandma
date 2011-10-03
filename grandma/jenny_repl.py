@@ -5,7 +5,8 @@ from random import sample
 
 
 """
-So far I have not been able to replace the jenny.c program since the algorithm is better (compact solution) and it is still way faster.
+So far I have not been able to replace the jenny.c program since the algorithm is better (compacter solution) and it is still way faster.
+But I decided to keep this solution arround so that I can continue the work later.
 
 jenny.c:
 1601 solutions, 0m1.104s

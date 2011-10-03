@@ -1,21 +1,21 @@
 from exceptions import ValueError
-from collections import OrderedDict
 
 data = {
-    "p1": ["v1_1", "v1_2", "v1_3"],
-    "p2": ["v2_1", "v2_2", "v2_3", "v2_4"],
-    "p3": ["v3_1", "v3_2", "v3_3", "v3_4", "v3_5"]
+    'font': ['arial', 'tahoma', 'brushScript', 'monotypeCorsive'],
+    'bold':   [True, False],
+    'italic': [True, False],
+    'strikethrough': [True, False],
+    'underline': [True, False],
+    'color': ['black', 'yellow', 'white', 'blue', 'red', 'green'],
+    'size': ['small', 'nominal', 'large', 'xLarge', 'xxLarge', 'xxxLarge', 'ridiculouslyLarge']
 }
+
     
-def run_app(*args):
-    """This is a sample app for demonstration purposes."""
-    print 'keys: ' + str(data.keys())
-    if len(args) <> 3:
-        raise ValueError('The run_app function requires 3 parameters!')
-    for p in range(3):
-        print 'args: ' + str(args)
-        if not(args[p] in data[data.keys()[p]]):
-            raise ValueError('Parameter ' + args[p] +
-                ' not in defined range of ' + data.keys()[p] + '!')
+def run_app(**params):
+    """This is a simple sample app for demonstration purposes."""
+    for p in params.keys():
+        if not(params[p] in data[p]):
+            raise ValueError('Parameter ' + params[p] +
+                ' not in defined range of ' + p + '!')
     return True
 
