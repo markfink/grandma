@@ -23,8 +23,6 @@ setup(
     name='grandma',
     version='0.1a2',
     packages = find_packages(),
-    #packages=['grandma', 'tests'],
-    #py_modules = ['grandma'],
     license='GNU LESSER GENERAL PUBLIC LICENSE, Version 3',
     long_description=open('README').read(),
     ext_modules = [Extension("jenny", ["./jenny/jenny.c"])],
@@ -46,3 +44,4 @@ setup(
         'Natural Language :: English',
     ],
 )
+

@@ -3,6 +3,7 @@ include LICENSE
 
 recursive-include bin/ *
 recursive-include tests/ *
+recursive-include demo/ *
 
 recursive-exclude research/ *
 

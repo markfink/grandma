@@ -10,7 +10,7 @@ def oracle_demo_app(**args):
     return True
 
 
-def check_one_case(args):
+def check_single_testcase(args):
     """Helper function calling demo app and oracle"""
     res = run_app(**args)
     ocl = oracle_demo_app(**args)
@@ -19,7 +19,7 @@ def check_one_case(args):
 
 def test_wussy():
     """This is a very weak test since it only contains a single sample set of parameters."""
-    check_one_case({'font': 'arial', 'bold': True, 'italic': False,
+    check_single_testcase({'font': 'arial', 'bold': True, 'italic': False,
         'strikethrough': True, 'underline': True, 'color': 'black', 'size': 'xLarge'
     })
     
@@ -28,13 +28,13 @@ def test_powerfull():
     """Demonstrate application of combinatorial testing."""
     
     spec = {
-        'font': ['arial', 'tahoma', 'brushScript', 'monotypeCorsive'],
-        'bold':   [True, False],
-        'italic': [True, False],
+        'font':          ['arial', 'tahoma', 'brushScript', 'monotypeCorsive'],
+        'bold':          [True, False],
+        'italic':        [True, False],
         'strikethrough': [True, False],
-        'underline': [True, False],
-        'color': ['black', 'yellow', 'white', 'blue', 'red', 'green'],
-        'size': ['small', 'nominal', 'large', 'xLarge', 'xxLarge', 'xxxLarge', 'ridiculouslyLarge']
+        'underline':     [True, False],
+        'color':         ['black', 'yellow', 'white', 'blue', 'red', 'green'],
+        'size':          ['small', 'nominal', 'large', 'xLarge', 'xxLarge', 'xxxLarge', 'ridiculouslyLarge']
     }
     
     # combinations I must NOT test
@@ -46,5 +46,5 @@ def test_powerfull():
     
     for t in t_ways(spec, 5, incompats=incompats, reqs=reqs):
         print 'test: ' + str(t)
-        yield check_one_case, t
+        yield check_single_testcase, t
 
