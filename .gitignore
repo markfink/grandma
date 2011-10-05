@@ -2,6 +2,7 @@
 research/
 built/
 build/
+dist/
 .coverage
 *.egg-info*
 
